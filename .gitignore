@@ -1,0 +1,46 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Backend
+backend/node_modules/
+
+# Frontend
+pcGoruntuOlustur/node_modules/
+pcGoruntuOlustur/dist/
+pcGoruntuOlustur/tmp/
+pcGoruntuOlustur/out-tsc/
+pcGoruntuOlustur/bazel-out/
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+pcGoruntuOlustur/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
+
