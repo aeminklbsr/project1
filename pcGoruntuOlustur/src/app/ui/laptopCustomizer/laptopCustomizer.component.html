@@ -1,0 +1,83 @@
+<div class="customizer-container">
+
+  <fieldset>
+    <legend>1. Laptop Görseli</legend>
+    <label for="laptopUploader">Laptop Görselini Yükle:</label>
+    <input type="file" id="laptopUploader" (change)="onLaptopFileChange($event)" accept="image/*">
+  </fieldset>
+
+  <fieldset [disabled]="!uploadedLaptopFile">
+    <legend>2. İşlemci Seç</legend>
+
+    <div *ngFor="let proc of processorOptions">
+      <input type="radio" name="processor" [id]="proc.value" [value]="proc.value" [(ngModel)]="selectedProcessorValue">
+
+      <label [for]="proc.value">{{ proc.name }}</label>
+    </div>
+  </fieldset>
+
+  <fieldset [disabled]="!uploadedLaptopFile">
+    <legend>3. İşletim Sistemi Seç</legend>
+
+    <div *ngFor="let os of operatingSystemOptions">
+      <input type="radio" name="operatingSystem" [id]="os.value" [value]="os.value"
+        [(ngModel)]="selectedOperatingSystem">
+
+      <label [for]="os.value">{{ os.name }}</label>
+    </div>
+  </fieldset>
+
+  <fieldset [disabled]="!uploadedLaptopFile">
+    <legend>4. Hz Seç</legend>
+
+    <div *ngFor="let hz of hzOptions">
+      <input type="radio" name="hz" [id]="hz.value" [value]="hz.value" [(ngModel)]="selectedHz">
+      <label [for]="hz.value">{{ hz.name }}</label>
+    </div>
+  </fieldset>
+
+  <fieldset [disabled]="!uploadedLaptopFile">
+    <legend>5. Ekran Kartı Seç</legend>
+
+    <div *ngFor="let ekranKarti of ekranKartiOptions">
+      <input type="radio" name="ekranKarti" [id]="ekranKarti.value" [value]="ekranKarti.value"
+        [(ngModel)]="selectedEkranKarti">
+      <label [for]="ekranKarti.value">{{ ekranKarti.name }}</label>
+    </div>
+  </fieldset>
+
+  <fieldset [disabled]="!uploadedLaptopFile">
+    <legend>6. HDMI Seç</legend>
+
+    <div *ngFor="let hdmi of hdmiOptions">
+      <input type="radio" name="hdmi" [id]="hdmi.value" [value]="hdmi.value" [(ngModel)]="selectedHdmi">
+      <label [for]="hdmi.value">{{ hdmi.name }}</label>
+    </div>
+  </fieldset>
+
+
+  <button (click)="onGenerateClick()"
+    [disabled]="!uploadedLaptopFile || !selectedProcessorValue || !selectedOperatingSystem || isLoading">
+
+    {{ isLoading ? 'Oluşturuluyor...' : 'Görseli Oluştur' }}
+  </button>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div class="image-container">
+
+    <div *ngIf="uploadedLaptopPreviewSrc && !finalGeneratedImage" class="preview-container">
+      <h4>Önizleme:</h4>
+      <img [src]="uploadedLaptopPreviewSrc" alt="Yüklenen Laptop Önizlemesi" style="max-width: 100%;">
+    </div>
+
+    <div *ngIf="finalGeneratedImage" class="result-container">
+      <h4>Oluşturulan Görsel:</h4>
+      <img [src]="finalGeneratedImage" alt="Oluşturulan Görsel" style="max-width: 100%;">
+    </div>
+
+  </div>
+
+</div>
