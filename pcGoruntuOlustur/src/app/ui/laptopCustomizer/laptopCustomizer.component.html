@@ -1,66 +1,141 @@
 <div class="customizer-container">
 
-  <fieldset>
+  <fieldset class="upload-section">
     <legend>1. Laptop Görseli</legend>
-    <label for="laptopUploader">Laptop Görselini Yükle:</label>
-    <input type="file" id="laptopUploader" (change)="onLaptopFileChange($event)" accept="image/*">
-  </fieldset>
-
-  <fieldset [disabled]="!uploadedLaptopFile">
-    <legend>2. İşlemci Seç</legend>
-
-    <div *ngFor="let proc of processorOptions">
-      <input type="radio" name="processor" [id]="proc.value" [value]="proc.value" [(ngModel)]="selectedProcessorValue">
-
-      <label [for]="proc.value">{{ proc.name }}</label>
+    
+    <div class="drop-zone" 
+         [class.dragging]="isDragging"
+         (dragover)="onDragOver($event)" 
+         (dragleave)="onDragLeave($event)" 
+         (drop)="onDrop($event)"
+         (click)="fileInput.click()">
+      
+      <div class="drop-content">
+        <p *ngIf="!uploadedLaptopFile">Laptop görselini buraya sürükleyin veya tıklayın</p>
+        <p *ngIf="uploadedLaptopFile">Seçilen Dosya: {{ uploadedLaptopFile.name }}</p>
+      </div>
+      <input #fileInput type="file" id="laptopUploader" (change)="onLaptopFileChange($event)" accept="image/*" hidden>
     </div>
   </fieldset>
 
-  <fieldset [disabled]="!uploadedLaptopFile">
-    <legend>3. İşletim Sistemi Seç</legend>
+  <div class="options-grid">
+    
+    <fieldset [disabled]="!uploadedLaptopFile">
+      <legend>2. İşlemci Seç</legend>
+      
+      <!-- İşlemci Filtreleme Tabları -->
+      <div class="filter-tabs">
+        <button type="button" 
+                [class.active]="processorBrand === 'intel'" 
+                (click)="processorBrand = 'intel'; selectedProcessorValue = ''">Intel</button>
+        <button type="button" 
+                [class.active]="processorBrand === 'amd'" 
+                (click)="processorBrand = 'amd'; selectedProcessorValue = ''">AMD</button>
+      </div>
 
-    <div *ngFor="let os of operatingSystemOptions">
-      <input type="radio" name="operatingSystem" [id]="os.value" [value]="os.value"
-        [(ngModel)]="selectedOperatingSystem">
+      <div class="options-list">
+        <div *ngFor="let proc of filteredProcessorOptions">
+          <input type="radio" name="processor" [id]="proc.value" [value]="proc.value" [(ngModel)]="selectedProcessorValue">
+          <label [for]="proc.value">{{ proc.name }}</label>
+        </div>
+        <div *ngIf="filteredProcessorOptions.length === 0" class="no-options">
+          Bu kategoride seçenek bulunamadı.
+        </div>
+      </div>
+    </fieldset>
 
-      <label [for]="os.value">{{ os.name }}</label>
+    <fieldset [disabled]="!uploadedLaptopFile">
+      <legend>3. İşletim Sistemi Seç</legend>
+      <div class="options-list">
+        <div *ngFor="let os of operatingSystemOptions">
+          <input type="radio" name="operatingSystem" [id]="os.value" [value]="os.value" [(ngModel)]="selectedOperatingSystem">
+          <label [for]="os.value">{{ os.name }}</label>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset [disabled]="!uploadedLaptopFile">
+      <legend>4. Ekran Kartı Seç</legend>
+      
+      <!-- Ekran Kartı Filtreleme Tabları -->
+      <div class="filter-tabs">
+        <button type="button" 
+                [class.active]="gpuBrand === 'nvidia'" 
+                (click)="gpuBrand = 'nvidia'; selectedEkranKarti = ''">NVIDIA</button>
+        <button type="button" 
+                [class.active]="gpuBrand === 'amd'" 
+                (click)="gpuBrand = 'amd'; selectedEkranKarti = ''">AMD</button>
+        <button type="button" 
+                [class.active]="gpuBrand === 'intel'" 
+                (click)="gpuBrand = 'intel'; selectedEkranKarti = ''">Intel</button>
+      </div>
+
+      <div class="options-list scrollable-list">
+        <div *ngFor="let ekranKarti of filteredEkranKartiOptions">
+          <input type="radio" name="ekranKarti" [id]="ekranKarti.value" [value]="ekranKarti.value" [(ngModel)]="selectedEkranKarti">
+          <label [for]="ekranKarti.value">{{ ekranKarti.name }}</label>
+        </div>
+        <div *ngIf="filteredEkranKartiOptions.length === 0" class="no-options">
+          Bu kategoride seçenek bulunamadı.
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset [disabled]="!uploadedLaptopFile">
+      <legend>5. Hz Seç</legend>
+      <div class="options-list">
+        <div *ngFor="let hz of hzOptions">
+          <input type="radio" name="hz" [id]="hz.value" [value]="hz.value" [(ngModel)]="selectedHz">
+          <label [for]="hz.value">{{ hz.name }}</label>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset [disabled]="!uploadedLaptopFile">
+      <legend>6. Diğer Özellikler</legend>
+      <div class="options-list">
+        <!-- HDMI -->
+        <div *ngFor="let hdmi of hdmiOptions">
+          <input type="radio" name="hdmi" [id]="hdmi.value" [value]="hdmi.value" [(ngModel)]="selectedHdmi">
+          <label [for]="hdmi.value">{{ hdmi.name }}</label>
+        </div>
+        <!-- Klavye -->
+        <div *ngFor="let opt of klavyeOptions">
+          <input type="radio" name="klavye" [id]="opt.value" [value]="opt.value" [(ngModel)]="selectedKlavye">
+          <label [for]="opt.value">{{ opt.name }}</label>
+        </div>
+        <!-- Mavi Işık -->
+        <div *ngFor="let opt of maviIsikOptions">
+          <input type="radio" name="maviIsik" [id]="opt.value" [value]="opt.value" [(ngModel)]="selectedMaviIsik">
+          <label [for]="opt.value">{{ opt.name }}</label>
+        </div>
+        <!-- Type-C -->
+        <div *ngFor="let opt of typeCOptions">
+          <input type="radio" name="typeC" [id]="opt.value" [value]="opt.value" [(ngModel)]="selectedTypeC">
+          <label [for]="opt.value">{{ opt.name }}</label>
+        </div>
+        <!-- Wifi 6 -->
+        <div *ngFor="let opt of wifi6Options">
+          <input type="radio" name="wifi6" [id]="opt.value" [value]="opt.value" [(ngModel)]="selectedWifi6">
+          <label [for]="opt.value">{{ opt.name }}</label>
+        </div>
+      </div>
+    </fieldset>
+
+  </div>
+
+  <fieldset [disabled]="!uploadedLaptopFile" class="generate-section">
+    <legend>Dosya Adı ve Oluştur</legend>
+    <div class="file-name-input">
+      <label for="fileName">Kaydedilecek Dosya Adı:</label>
+      <input type="text" id="fileName" [(ngModel)]="downloadFileName" placeholder="Örn: laptop-tasarim-1">
     </div>
+
+    <button (click)="onGenerateClick()" class="generate-btn"
+      [disabled]="!uploadedLaptopFile || !selectedProcessorValue || !selectedOperatingSystem || isLoading">
+      {{ isLoading ? 'Oluşturuluyor...' : 'Görseli Oluştur' }}
+    </button>
   </fieldset>
-
-  <fieldset [disabled]="!uploadedLaptopFile">
-    <legend>4. Hz Seç</legend>
-
-    <div *ngFor="let hz of hzOptions">
-      <input type="radio" name="hz" [id]="hz.value" [value]="hz.value" [(ngModel)]="selectedHz">
-      <label [for]="hz.value">{{ hz.name }}</label>
-    </div>
-  </fieldset>
-
-  <fieldset [disabled]="!uploadedLaptopFile">
-    <legend>5. Ekran Kartı Seç</legend>
-
-    <div *ngFor="let ekranKarti of ekranKartiOptions">
-      <input type="radio" name="ekranKarti" [id]="ekranKarti.value" [value]="ekranKarti.value"
-        [(ngModel)]="selectedEkranKarti">
-      <label [for]="ekranKarti.value">{{ ekranKarti.name }}</label>
-    </div>
-  </fieldset>
-
-  <fieldset [disabled]="!uploadedLaptopFile">
-    <legend>6. HDMI Seç</legend>
-
-    <div *ngFor="let hdmi of hdmiOptions">
-      <input type="radio" name="hdmi" [id]="hdmi.value" [value]="hdmi.value" [(ngModel)]="selectedHdmi">
-      <label [for]="hdmi.value">{{ hdmi.name }}</label>
-    </div>
-  </fieldset>
-
-
-  <button (click)="onGenerateClick()"
-    [disabled]="!uploadedLaptopFile || !selectedProcessorValue || !selectedOperatingSystem || isLoading">
-
-    {{ isLoading ? 'Oluşturuluyor...' : 'Görseli Oluştur' }}
-  </button>
 
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
@@ -70,12 +145,18 @@
 
     <div *ngIf="uploadedLaptopPreviewSrc && !finalGeneratedImage" class="preview-container">
       <h4>Önizleme:</h4>
-      <img [src]="uploadedLaptopPreviewSrc" alt="Yüklenen Laptop Önizlemesi" style="max-width: 100%;">
+      <img [src]="uploadedLaptopPreviewSrc" alt="Yüklenen Laptop Önizlemesi">
     </div>
 
     <div *ngIf="finalGeneratedImage" class="result-container">
       <h4>Oluşturulan Görsel:</h4>
-      <img [src]="finalGeneratedImage" alt="Oluşturulan Görsel" style="max-width: 100%;">
+      <img [src]="finalGeneratedImage" alt="Oluşturulan Görsel">
+      
+      <div class="download-section">
+        <button (click)="downloadImage()" class="download-btn">
+          Görseli İndir
+        </button>
+      </div>
     </div>
 
   </div>

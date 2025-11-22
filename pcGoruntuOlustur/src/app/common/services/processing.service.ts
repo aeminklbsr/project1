@@ -23,7 +23,11 @@ export class ProcessingService {
     processorValue: string,
     hzValue?: string,
     ekranKartiValue?: string,
-    hdmiValue?: string
+    hdmiValue?: string,
+    klavyeValue?: string,
+    maviIsikValue?: string,
+    typeCValue?: string,
+    wifi6Value?: string
   ): Observable<string> {
     
     // Dosya ve metin verilerini göndermek için FormData kullanmalıyız
@@ -34,6 +38,10 @@ export class ProcessingService {
     if (hzValue) formData.append('hzValue', hzValue);
     if (ekranKartiValue) formData.append('ekranKartiValue', ekranKartiValue);
     if (hdmiValue) formData.append('hdmiValue', hdmiValue);
+    if (klavyeValue) formData.append('klavyeValue', klavyeValue);
+    if (maviIsikValue) formData.append('maviIsikValue', maviIsikValue);
+    if (typeCValue) formData.append('typeCValue', typeCValue);
+    if (wifi6Value) formData.append('wifi6Value', wifi6Value);
 
     return this.http.post(this.apiUrl, formData, {
       // ÖNEMLİ: Yanıtın bir resim/blob olduğunu belirtiyoruz
